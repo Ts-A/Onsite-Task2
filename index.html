@@ -6,21 +6,25 @@
   <title>Oreo Stacking</title>
   <link rel="icon" href="#">
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <header>
     <h1>Oreo Stacking</h1>
-    <aside>
-      <label>Enter Custom Made Oreo</label>
-      <input id='oreo' type='text'>
-      <button id='submit'>Submit</button>
-      <select id='select' value="1">
-        <option>Select the stack</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-      </select>
-    </aside>
+    <section style="max-width: 600px;">
+      <div>
+        <span id='stackCount'>1</span>
+        <input id='oreo' type='text' placeholder="Enter Custom Made Oreo">  
+      </div>
+      <div class="buttons">
+        <select id='select' value="1">
+          <option value="1">1</option>
+          <option value="2">2</option>
+        </select>
+        <button id='submit'></button>
+      </div>
+    </section>
   </header>
 
   <main>
@@ -28,6 +32,8 @@
       <div class="cookie"></div>
     </div>  
   </main>
+
+  <img class='oreoPack' src="oreo.png" width="250" height="200" hidden>
 
   <script src="script.js" type="text/javascript"></script>
 

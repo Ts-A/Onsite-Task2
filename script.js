@@ -1,15 +1,19 @@
 const pattern =  /^(o|re)*(o|re|&)*(o|re)$/i,
       submit = document.querySelector('#submit'),
       oreo   = document.querySelector('#oreo'),
-      cookie = document.querySelector('.cookie'),
+      // cookie = document.querySelector('.cookie'),
       stack = document.querySelector('.stack'),
       select = document.querySelector('#select')
 
 var cookies      = document.querySelectorAll('.cookie'),
-    selectCookie = 0
+    selectCookie = 0,
+    oreoPack = document.querySelector(".oreoPack")
+
+document.querySelector('#stackCount').textContent = select.value
 
 select.addEventListener("change",() => {
   let sv = Number(select.value)
+  document.querySelector('#stackCount').textContent = select.value
   selectCookie = sv - 1
   if( sv > cookies.length ){
     let element = document.createElement("div")
@@ -24,24 +28,21 @@ select.addEventListener("change",() => {
     option.value = `${sv+1}`
     select.appendChild(option)
   }
-  else{
-  }
 })
 
-submit.addEventListener('click', () => {
+submit.addEventListener('click', async () => {
   cookies[selectCookie].innerHTML = ''
   if( !validate( oreo.value , pattern  ) ){
     oreo.value = ''
-    oreo.placeholder = 'Enter only from O,RE,& and do not start or end with &'
     return oreo.focus()
   }
-
   let encoded  = encoder( oreo.value.toUpperCase() ),
       children = decoder( encoded )
+  oreoPackOpener()
+  await setWait()
   for( i of children ){
     cookies[selectCookie].appendChild( i )
   }
-  cookies[selectCookie].style.height = `${ ( children.length + 2 )*10 + 100}px`
   dragElement( cookies[selectCookie] );
 })
 
@@ -64,13 +65,14 @@ const decoder = ( elem ) => {
       length = 100,
       z = elem.length
   for( i of elem ){
-    let x = ( document.createElement("img") )
+    let x = document.createElement("img")
     if( i == 'O' ){
       if( array.length == elem.length - 1 ){
         x.src = 'bottom.png'
         x.classList.add("new")
         length -= 90
         x.style.top = `${length}px`
+        x.style.left = `40vw`
         x.style.zIndex = z-- 
         x.draggable = true
       } else{
@@ -78,6 +80,7 @@ const decoder = ( elem ) => {
         x.src = 'top.png'
         length -= 90
         x.style.top = `${length}px`
+        x.style.left = `40vw`
         x.style.zIndex = z--
         x.draggable = true
       }
@@ -87,6 +90,7 @@ const decoder = ( elem ) => {
       x.src = 'middle.png'
       length -= 90
       x.style.top = `${length}px`
+      x.style.left = `40vw`
       x.style.zIndex = z--
       x.draggable = true
     }
@@ -96,6 +100,7 @@ const decoder = ( elem ) => {
       x.alt = ''
       length -= 50
       x.style.top = `${length}px`
+      x.style.left = `40vw`
       x.style.zIndex = z-- 
       x.style.opacity = 0
       x.draggable = true
@@ -136,4 +141,26 @@ const dragElement = ( oreo ) => {
     document.onmouseup = null
     document.onmousemove = null
   }
+}
+
+const oreoPackOpener = () => {
+  oreoPack.setAttribute("hidden",false)
+  oreoPack.id = 'animate'
+}
+
+const oreoPackCloser = () => {
+  oreoPack.setAttribute("hidden",true)
+  oreoPack.id = null
+}
+
+const setWait = () => {
+  return new Promise((resolve,reject)=>{
+    oreoPack.addEventListener("click",()=>{
+      oreoPack.id = 'animate-stay'
+      setTimeout(()=>{
+        oreoPackCloser()
+        resolve("proceed")
+      },1000)
+    })  
+  })
 }
